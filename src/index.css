@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-navy: var(--navy);
+  --color-stuck: var(--stuck);
+  --color-stuck-text: var(--stuck-text);
+  --color-done: var(--done);
+  --color-done-text: var(--done-text);
+  --color-todo: var(--todo);
+  --color-todo-text: var(--todo-text);
+  --color-progress: var(--progress);
+  --color-progress-text: var(--progress-text);
+  --color-bg-card: var(--bg-card);
+  --color-border: var(--border);
+  --color-priority-high: var(--priority-high);
+  --color-priority-high-text: var(--priority-high-text);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-medium-text: var(--priority-medium-text);
+  --color-priority-low: var(--priority-low);
+  --color-priority-low-text: var(--priority-low-text);
+}
+
+:root {
+  --primary: #E3F2FD;
+  --secondary: #F5F5F7;
+  --navy: #1A237E;
+  --stuck: #FFEBEE;
+  --stuck-text: #C62828;
+  --done: #E8F5E9;
+  --done-text: #2E7D32;
+  --todo: #FFF3E0;
+  --todo-text: #EF6C00;
+  --progress: #E1F5FE;
+  --progress-text: #0277BD;
+  --bg-card: #FFFFFF;
+  --border: rgba(26, 35, 126, 0.05);
+  --priority-high: #FEE2E2;
+  --priority-high-text: #B91C1C;
+  --priority-medium: #FFEDD5;
+  --priority-medium-text: #C2410C;
+  --priority-low: #DBEAFE;
+  --priority-low-text: #1D4ED8;
+}
+
+.dark {
+  --primary: #2C3E50;
+  --secondary: #121212;
+  --navy: #E0E0E0;
+  --stuck: #4A1A1A;
+  --stuck-text: #FF8A80;
+  --done: #1A3A1A;
+  --done-text: #81C784;
+  --todo: #3A2A1A;
+  --todo-text: #FFB74D;
+  --progress: #1A2A3A;
+  --progress-text: #64B5F6;
+  --bg-card: #1E1E1E;
+  --border: rgba(255, 255, 255, 0.1);
+  --priority-high: #451212;
+  --priority-high-text: #F87171;
+  --priority-medium: #452112;
+  --priority-medium-text: #FB923C;
+  --priority-low: #122145;
+  --priority-low-text: #60A5FA;
+}
+
+@layer base {
+  body {
+    @apply bg-secondary text-navy font-sans transition-colors duration-300;
+  }
+}
+
+.kanban-column {
+  @apply flex flex-col bg-bg-card/50 rounded-xl p-4 min-w-[300px] h-full border border-border;
+}
+
+.task-card {
+  @apply bg-bg-card rounded-lg p-4 shadow-sm border border-border hover:shadow-md transition-shadow cursor-pointer;
+}
+
+.sidebar-item {
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary transition-colors text-navy/70 hover:text-navy font-medium;
+}
+
+.sidebar-item.active {
+  @apply bg-primary text-navy;
+}
