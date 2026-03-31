@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, FolderKanban, Settings, Plus, Flower2 } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, FolderKanban, Settings, Plus, Flower2, Smile } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { cn } from '../lib/utils';
 import { CreateProjectModal } from './CreateProjectModal';
@@ -13,15 +13,10 @@ export const Sidebar: React.FC = () => {
     <aside className="w-64 bg-bg-card border-r border-border flex flex-col h-screen sticky top-0 transition-colors duration-300">
       <div className="p-6 space-y-6">
         <div className="flex items-center gap-3 text-navy font-bold text-2xl">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <Flower2 size={38} className="text-yellow-400 fill-yellow-400" />
+          <div className="relative w-12 h-12 flex items-center justify-center">
+            <Flower2 size={48} className="text-yellow-400 fill-yellow-400" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-inner">
-                <div className="flex gap-0.5">
-                  <div className="w-0.5 h-0.5 bg-navy rounded-full" />
-                  <div className="w-0.5 h-0.5 bg-navy rounded-full" />
-                </div>
-              </div>
+              <Smile size={20} className="text-navy fill-white" strokeWidth={2.5} />
             </div>
           </div>
           TaskFlow

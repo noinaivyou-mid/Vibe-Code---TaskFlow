@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { Flower2, ArrowRight, CheckCircle2, LayoutGrid, Users, Zap } from 'lucide-react';
+import { Flower2, ArrowRight, CheckCircle2, LayoutGrid, Users, Zap, Smile } from 'lucide-react';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -11,8 +11,11 @@ export const Landing: React.FC = () => {
       {/* Navigation */}
       <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-3 font-bold text-2xl">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <Flower2 size={38} className="text-yellow-400 fill-yellow-400" />
+          <div className="relative w-12 h-12 flex items-center justify-center">
+            <Flower2 size={48} className="text-yellow-400 fill-yellow-400" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Smile size={20} className="text-[#0a0a0a] fill-white" strokeWidth={2.5} />
+            </div>
           </div>
           TaskFlow
         </div>

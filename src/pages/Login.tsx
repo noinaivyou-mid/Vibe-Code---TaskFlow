@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { Flower2, Mail, Lock, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Flower2, Mail, Lock, ArrowRight, Github, Chrome, Smile } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const Login: React.FC = () => {
@@ -30,8 +30,11 @@ export const Login: React.FC = () => {
         className="w-full max-w-md bg-white border border-[#0a0a0a] p-10 shadow-[20px_20px_0px_rgba(10,10,10,0.05)]"
       >
         <div className="flex flex-col items-center mb-10">
-          <div className="relative w-12 h-12 flex items-center justify-center mb-4">
-            <Flower2 size={44} className="text-yellow-400 fill-yellow-400" />
+          <div className="relative w-14 h-14 flex items-center justify-center mb-4">
+            <Flower2 size={56} className="text-yellow-400 fill-yellow-400" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Smile size={24} className="text-[#0a0a0a] fill-white" strokeWidth={2.5} />
+            </div>
           </div>
           <h2 className="text-3xl font-bold tracking-tight text-[#0a0a0a]">Welcome Back</h2>
           <p className="text-sm font-medium text-[#0a0a0a]/40 uppercase tracking-widest mt-2">Enter your details to sign in</p>
