@@ -32,11 +32,14 @@ export const MyTasks: React.FC = () => {
   });
 
   const allTasks = projects.flatMap(p => p.tasks);
-  const myTasks = allTasks.filter(t => 
-    t.assignee.name === currentUser.name &&
-    (t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     projects.find(p => p.id === t.projectId)?.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const myTasks = allTasks.filter(t => {
+    const isAssignedToMe = t.assignee.id === currentUser.id;
+    const matchesSearch = !searchQuery || 
+      t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      projects.find(p => p.id === t.projectId)?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return isAssignedToMe && matchesSearch;
+  });
 
   const groups = [
     {

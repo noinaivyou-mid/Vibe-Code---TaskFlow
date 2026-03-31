@@ -8,6 +8,22 @@ import { TaskModal } from '../components/TaskModal';
 import { CreateTaskModal } from '../components/CreateTaskModal';
 import { Task } from '../types';
 import { cn } from '../lib/utils';
+import { 
+  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid
+} from 'recharts';
+
+const STATUS_COLORS = {
+  'To Do': '#6366F1',
+  'In Progress': '#F59E0B',
+  'Done': '#10B981',
+};
+
+const PRIORITY_COLORS = {
+  'High': '#EF4444',
+  'Medium': '#F59E0B',
+  'Low': '#3B82F6',
+};
 
 export const Dashboard: React.FC = () => {
   const { projects, currentUser, deleteTask } = useApp();
@@ -18,7 +34,7 @@ export const Dashboard: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const allTasks = projects.flatMap(p => p.tasks);
-  const myTasks = allTasks.filter(t => t.assignee.name === currentUser.name);
+  const myTasks = allTasks.filter(t => t.assignee.id === currentUser.id);
   
   const dueToday = myTasks.filter(t => isToday(new Date(t.dueDate)) && t.status !== 'Done');
   const overdue = myTasks.filter(t => isPast(new Date(t.dueDate)) && !isToday(new Date(t.dueDate)) && t.status !== 'Done');
@@ -47,6 +63,23 @@ export const Dashboard: React.FC = () => {
     { label: 'Total Tasks', value: myTasks.length, icon: TrendingUp, color: 'text-navy', bg: 'bg-secondary' },
   ];
 
+  const statusCounts = myTasks.reduce((acc, task) => {
+    acc[task.status] = (acc[task.status] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const statusChartData = Object.entries(statusCounts).map(([name, value]) => ({ name, value }));
+
+  const priorityCounts = myTasks.reduce((acc, task) => {
+    acc[task.priority] = (acc[task.priority] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const priorityChartData = ['Low', 'Medium', 'High'].map(p => ({
+    name: p,
+    value: priorityCounts[p] || 0
+  }));
+
   return (
     <div className="p-8 space-y-10 max-w-7xl mx-auto">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -74,6 +107,75 @@ export const Dashboard: React.FC = () => {
             <div className="text-sm font-semibold text-navy/40 uppercase tracking-wider">{stat.label}</div>
           </motion.div>
         ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-bg-card p-6 rounded-2xl border border-border shadow-sm h-[400px] flex flex-col"
+        >
+          <h3 className="font-bold text-navy mb-6">Task Status Distribution</h3>
+          <div className="flex-1 min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={statusChartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80}
+                  outerRadius={100}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {statusChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name as keyof typeof STATUS_COLORS] || '#8884d8'} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="bg-bg-card p-6 rounded-2xl border border-border shadow-sm h-[400px] flex flex-col"
+        >
+          <h3 className="font-bold text-navy mb-6">Tasks by Priority</h3>
+          <div className="flex-1 min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={priorityChartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 12, fill: '#6B7280', fontWeight: 500 }} 
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fontSize: 12, fill: '#6B7280', fontWeight: 500 }} 
+                />
+                <Tooltip 
+                  cursor={{ fill: '#F3F4F6' }}
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                />
+                <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={40}>
+                  {priorityChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={PRIORITY_COLORS[entry.name as keyof typeof PRIORITY_COLORS] || '#8884d8'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
