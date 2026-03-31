@@ -1,26 +1,10 @@
 import type { NextFunction, Request, Response } from 'express';
-import { verifyAccessToken } from '../lib/auth';
+import { requireAuth as baseRequireAuth } from '../../middleware/auth';
 import { forbidden, notFound, unauthorized } from '../lib/http';
 import { prisma } from '../lib/prisma';
 
 export async function requireAuth(req: Request, _res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-
-  if (!header?.startsWith('Bearer ')) {
-    return next(unauthorized());
-  }
-
-  try {
-    const token = header.slice('Bearer '.length).trim();
-    const payload = verifyAccessToken(token);
-    req.auth = {
-      userId: payload.sub,
-      email: payload.email,
-    };
-    return next();
-  } catch {
-    return next(unauthorized('Invalid or expired access token'));
-  }
+  return baseRequireAuth(req, _res, next);
 }
 
 export async function requireProjectMember(req: Request, _res: Response, next: NextFunction) {

@@ -1,16 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Bell, Sun, Moon, LogOut } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { cn } from '../lib/utils';
 import { Theme } from '../types';
 
 export const Topbar: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser, theme, setTheme, logout } = useApp();
 
   const themes: { id: Theme; icon: any; label: string }[] = [
     { id: 'light', icon: Sun, label: 'Light' },
     { id: 'dark', icon: Moon, label: 'Dark' },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/', { replace: true });
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  };
 
   return (
     <header className="h-16 bg-bg-card border-b border-border flex items-center justify-between px-8 sticky top-0 z-10 transition-colors duration-300">
@@ -56,7 +64,7 @@ export const Topbar: React.FC = () => {
             className="w-10 h-10 rounded-full border-2 border-primary"
           />
           <button 
-            onClick={logout}
+            onClick={handleLogout}
             className="p-2 text-navy/40 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all ml-2"
             title="Logout"
           >

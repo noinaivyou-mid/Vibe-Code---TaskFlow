@@ -11,6 +11,7 @@ interface AppContextType {
   setTheme: (theme: Theme) => void;
   login: () => void;
   logout: () => void;
+  updateCurrentUser: (userData: Partial<User>) => void;
   addTask: (projectId: string, task: Omit<Task, 'id' | 'comments'>) => void;
   updateTask: (taskId: string, taskData: Partial<Task>) => void;
   deleteTask: (taskId: string) => void;
@@ -24,8 +25,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [projects, setProjects] = useState<Project[]>(mockProjects);
-  const [currentUser] = useState<User>(mockUser);
-  const [team] = useState<User[]>(mockTeam);
+  const [currentUser, setCurrentUser] = useState<User>(mockUser);
+  const [team, setTeam] = useState<User[]>(mockTeam);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [theme, setThemeState] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme;
@@ -53,6 +54,38 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
+
+  const updateCurrentUser = (userData: Partial<User>) => {
+    setCurrentUser(prev => {
+      const nextUser = { ...prev, ...userData };
+
+      setTeam(teamPrev =>
+        teamPrev.map(member => (member.id === prev.id ? { ...member, ...userData } : member))
+      );
+
+      setProjects(projectsPrev =>
+        projectsPrev.map(project => ({
+          ...project,
+          tasks: project.tasks.map(task => {
+            const nextTask = task.assignee.id === prev.id
+              ? { ...task, assignee: { ...task.assignee, ...userData } }
+              : task;
+
+            return {
+              ...nextTask,
+              comments: nextTask.comments.map(comment =>
+                comment.user === prev.name && userData.name
+                  ? { ...comment, user: userData.name }
+                  : comment
+              ),
+            };
+          }),
+        }))
+      );
+
+      return nextUser;
+    });
+  };
 
   const addProject = (name: string, description: string) => {
     const newProject: Project = {
@@ -129,6 +162,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       setTheme, 
       login,
       logout,
+      updateCurrentUser,
       addTask, 
       updateTask, 
       deleteTask, 

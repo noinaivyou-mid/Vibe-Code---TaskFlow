@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { Flower2, ArrowRight, CheckCircle2, LayoutGrid, Users, Zap, Smile } from 'lucide-react';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f5f5f4] text-[#0a0a0a] font-sans selection:bg-navy selection:text-white">
