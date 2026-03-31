@@ -6,7 +6,6 @@ import { format, isToday, isPast } from 'date-fns';
 import { Badge } from '../components/Badge';
 import { TaskModal } from '../components/TaskModal';
 import { CreateTaskModal } from '../components/CreateTaskModal';
-import { CreateProjectModal } from '../components/CreateProjectModal';
 import { Task } from '../types';
 import { cn } from '../lib/utils';
 
@@ -17,7 +16,6 @@ export const Dashboard: React.FC = () => {
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
   const allTasks = projects.flatMap(p => p.tasks);
   const myTasks = allTasks.filter(t => t.assignee.name === currentUser.name);
@@ -56,13 +54,6 @@ export const Dashboard: React.FC = () => {
           <h1 className="text-4xl font-bold text-navy mb-2">Welcome back, {currentUser.name}!</h1>
           <p className="text-navy/50">Here's what's happening with your projects today.</p>
         </div>
-        <button 
-          onClick={() => setIsProjectModalOpen(true)}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-navy text-bg-card rounded-xl font-bold hover:bg-navy/90 transition-all shadow-lg shadow-navy/20"
-        >
-          <Plus size={20} />
-          New Project
-        </button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -262,11 +253,6 @@ export const Dashboard: React.FC = () => {
         }}
         projectId={editingTask?.projectId || ''}
         taskToEdit={editingTask || undefined}
-      />
-
-      <CreateProjectModal 
-        isOpen={isProjectModalOpen} 
-        onClose={() => setIsProjectModalOpen(false)} 
       />
 
       <AnimatePresence>

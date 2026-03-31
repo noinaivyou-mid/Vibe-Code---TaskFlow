@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, CheckSquare, FolderKanban, Settings, Plus, Flower2 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { cn } from '../lib/utils';
+import { CreateProjectModal } from './CreateProjectModal';
 
 export const Sidebar: React.FC = () => {
   const { projects } = useApp();
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
   return (
     <aside className="w-64 bg-bg-card border-r border-border flex flex-col h-screen sticky top-0 transition-colors duration-300">
-      <div className="p-6">
+      <div className="p-6 space-y-6">
         <div className="flex items-center gap-3 text-navy font-bold text-2xl">
           <div className="relative w-10 h-10 flex items-center justify-center">
             <Flower2 size={38} className="text-yellow-400 fill-yellow-400" />
@@ -24,6 +26,14 @@ export const Sidebar: React.FC = () => {
           </div>
           TaskFlow
         </div>
+
+        <button 
+          onClick={() => setIsProjectModalOpen(true)}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-navy text-bg-card rounded-xl font-bold hover:bg-navy/90 transition-all shadow-lg shadow-navy/10 text-sm"
+        >
+          <Plus size={18} />
+          New Project
+        </button>
       </div>
 
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -57,6 +67,11 @@ export const Sidebar: React.FC = () => {
           Settings
         </NavLink>
       </div>
+
+      <CreateProjectModal 
+        isOpen={isProjectModalOpen} 
+        onClose={() => setIsProjectModalOpen(false)} 
+      />
     </aside>
   );
 };

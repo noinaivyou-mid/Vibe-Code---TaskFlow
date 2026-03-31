@@ -7,7 +7,10 @@ interface AppContextType {
   currentUser: User;
   team: User[];
   theme: Theme;
+  isAuthenticated: boolean;
   setTheme: (theme: Theme) => void;
+  login: () => void;
+  logout: () => void;
   addTask: (projectId: string, task: Omit<Task, 'id' | 'comments'>) => void;
   updateTask: (taskId: string, taskData: Partial<Task>) => void;
   deleteTask: (taskId: string) => void;
@@ -23,10 +26,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [projects, setProjects] = useState<Project[]>(mockProjects);
   const [currentUser] = useState<User>(mockUser);
   const [team] = useState<User[]>(mockTeam);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [theme, setThemeState] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme;
     return saved || 'light';
   });
+
+  const login = () => setIsAuthenticated(true);
+  const logout = () => setIsAuthenticated(false);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
@@ -113,7 +120,23 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   return (
-    <AppContext.Provider value={{ projects, currentUser, team, theme, setTheme, addTask, updateTask, deleteTask, updateTaskStatus, getTaskById, addComment, addProject }}>
+    <AppContext.Provider value={{ 
+      projects, 
+      currentUser, 
+      team, 
+      theme, 
+      isAuthenticated,
+      setTheme, 
+      login,
+      logout,
+      addTask, 
+      updateTask, 
+      deleteTask, 
+      updateTaskStatus, 
+      getTaskById, 
+      addComment, 
+      addProject 
+    }}>
       {children}
     </AppContext.Provider>
   );

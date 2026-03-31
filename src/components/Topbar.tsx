@@ -1,11 +1,11 @@
 import React from 'react';
-import { Search, Bell, Sun, Moon } from 'lucide-react';
+import { Search, Bell, Sun, Moon, LogOut } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { cn } from '../lib/utils';
 import { Theme } from '../types';
 
 export const Topbar: React.FC = () => {
-  const { currentUser, theme, setTheme } = useApp();
+  const { currentUser, theme, setTheme, logout } = useApp();
 
   const themes: { id: Theme; icon: any; label: string }[] = [
     { id: 'light', icon: Sun, label: 'Light' },
@@ -55,6 +55,13 @@ export const Topbar: React.FC = () => {
             alt={currentUser.name} 
             className="w-10 h-10 rounded-full border-2 border-primary"
           />
+          <button 
+            onClick={logout}
+            className="p-2 text-navy/40 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all ml-2"
+            title="Logout"
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </div>
     </header>
